@@ -1,19 +1,11 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import List
-from cryptography.fernet import Fernet
 import httpx
 import pandas as pd
 
 app = FastAPI()
 
-# Generate a key for encryption (run this once and keep the key safe)
-# key = Fernet.generate_key()
-# print(key)
-
-# Use your previously generated key here
-key = b'your_generated_key_here'
-cipher = Fernet(key)
 
 class InputNumber(BaseModel):
     number: str
@@ -28,15 +20,6 @@ class NumberDetails(BaseModel):
 # Array to store details
 number_details_list = []
 
-# Encrypt the number
-def encrypt_number(number: str) -> str:
-    encrypted_number = cipher.encrypt(number.encode())
-    return encrypted_number.decode()
-
-# Decrypt the number (for testing purposes)
-def decrypt_number(encrypted_number: str) -> str:
-    decrypted_number = cipher.decrypt(encrypted_number.encode())
-    return decrypted_number.decode()
 
 # Send the encrypted number to the external system and receive details
 async def send_number_to_external_system(encrypted_number: str) -> NumberDetails:

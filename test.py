@@ -2,12 +2,13 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import List,Optional
 from uuid import    UUID, uuid4
-import rsa
 
 app = FastAPI()
 
 class InputNumber(BaseModel):
     number:str
+
+
 
 #json.laod()jsom.dump then hook
 #hook
@@ -26,20 +27,10 @@ public_key, private_key = rsa.newkeys(1024)
 
 
 
-async def encrypt_number(number: str) -> str:
-
-    encrypted_number = cipher.encrypt(number.encode())
-    return encrypted_number.decode()
-
-async def dencrypt_number(encrypt_number: str) -> str:
-
-    dencrypted_number = cipher.dencrypt(encrypted_number.encode())
-    return dencrypted_number.decode()
 
 async def send_number_to_external_system(encrypted_number: str) -> NumberDetails:
     
-    async with httpx.AsyncClient() as client:
-        response = await client.post("https://external-system-url/api", json={"number":encrypted_number})
+
        
         if response.status_code == 200:
             data =response.json()

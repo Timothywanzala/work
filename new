@@ -1,0 +1,58 @@
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from typing import List
+import httpx
+import pandas as pd
+
+app = FastAPI()
+
+
+class InputNumber(BaseModel):
+    number: str
+
+class NumberDetails(BaseModel):
+    name: str
+    invoice_number: str
+    product: List[str]
+    price: List[str]
+    date: str
+
+# Array to store details
+number_details_list = []
+
+
+# Send the encrypted number to the external system and receive details
+async def send_number_to_external_system(encrypted_number: str) -> NumberDetails:
+    async with httpx.AsyncClient() as client:
+        response = await client.post("https://external-system-url/api", json={"number": encrypted_number})
+        if response.status_code == 200:
+            data = response.json()
+            return NumberDetails(**data)
+        else:
+            raise HTTPException(status_code=response.status_code, detail="Failed to get details from external system")
+
+# Endpoint to receive number and process it
+@app.post("/process-number/")
+async def process_number(input_number: InputNumber):
+    # Encrypt the input number
+    encrypted_number = encrypt_number(input_number.number)
+    
+    # Send the encrypted number to the external system and get the details
+    number_details = await send_number_to_external_system(encrypted_number)
+    
+    # Append the received details to the list
+    number_details_list.append(number_details.dict())
+
+    # Convert the list of details to a pandas DataFrame
+    df = pd.DataFrame(number_details_list)
+    
+    # Convert the DataFrame to a dictionary with records orientation
+    data_in_table_format = df.to_dict(orient='records')
+    
+    # Return the data in table format
+    return data_in_table_format
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="localhost", port=8000)
+

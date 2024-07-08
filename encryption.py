@@ -1,40 +1,23 @@
 import rsa
+import json
 
-with open("public.pen", "wb") as f:
-    f.write(public_key.save_pkcs1("PEM"))
+def load_keys():
+    with open("public.pem", "rb") as f:
+        public_key = rsa.PublicKey.load_pkcs1(f.read())
+    with open("private.pem", "rb") as f:
+        private_key = rsa.PrivateKey.load_pkcs1(f.read())
+    return public_key, private_key
 
-with open("Private.pen", "wb") as f:
-    f.write(private_key.save_pkcs1("PEM"))
+def encrypt_and_sign(data: str, public_key, private_key):
+    encrypted_data = rsa.encrypt(data.encode(), public_key)
+    signature = rsa.sign(encrypted_data, private_key, 'SHA-256')
+    return encrypted_data, signature
 
+def verify_and_decrypt(encrypted_data, signature, public_key, private_key):
+    try:
+        rsa.verify(encrypted_data, signature, public_key)
+        decrypted_data = rsa.decrypt(encrypted_data, private_key).decode()
+        return decrypted_data
+    except rsa.VerificationError:
+        raise ValueError("Signature verification failed")
 
-with open("public_pen", "rb") as f:
-    public_key = rsa.PublicKey.load_pkcs1(f.read())
-
-with open("private_pen", "rb") as f:
-    private_key = rsa.PublicKey.load_pkcs1(f.read())
-
-message = #number to encrypt
-
-encrypted_message = open("encrypted.message", "rb").read()
-
-
-#ecrypted_message = rsa.encrypt(message.encode(), public_key)
-
-#with open("encrypted_message", "wb") as f:
-    f.write(ecrypted_message)
-
-clear_message = rsa.decrypt(encrypted_message, private_key)
-print(clear_message.decode())
-
-#signature
-signature = rsa.sign(message.encode(), private_key, "SHA-256") 
-
-
-with open("signature", "wb") as f:
-    f.write(signature)
-
-
-with open("signature", "rb") as f:
-    signature = f.read()
-
-rsa.verify(message.encode(), signature, public_key)

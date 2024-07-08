@@ -1,73 +1,65 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from typing import List,Optional
-from uuid import    UUID, uuid4
-import rsa
+from fastapi import FastAPI, HTTPException, Request
+import httpx
+import pandas as pd
+import json
+from datetime import datetime
 
 app = FastAPI()
 
-class InputNumber(BaseModel):
-    number:str
+# Array to store details
+number_details_list = []
 
-#json.laod()jsom.dump then hook
-#hook
-class NumberDetails(BaseModel):
-    name: str
-    invoice_number: str
-    product: List[str]
-    price: List[str]
-    date: str
+public_key, private_key = load_keys()
 
-number_details_list=[]
+# Load interface JSON structure from file
+with open('interface.json', 'r') as f:
+    interface_json_template = json.load(f)
 
-public_key, private_key = rsa.newkeys(1024)
-
-
-
-
-
-async def encrypt_number(number: str) -> str:
-
-    encrypted_number = cipher.encrypt(number.encode())
-    return encrypted_number.decode()
-
-async def dencrypt_number(encrypt_number: str) -> str:
-
-    dencrypted_number = cipher.dencrypt(encrypted_number.encode())
-    return dencrypted_number.decode()
-
-async def send_number_to_external_system(encrypted_number: str) -> NumberDetails:
-    
+# Send the encrypted number to the external system and receive details
+async def send_number_to_external_system(interface_json: dict) -> dict:
     async with httpx.AsyncClient() as client:
-        response = await client.post("https://external-system-url/api", json={"number":encrypted_number})
-       
+        response = await client.post("https://external-system-url/api", json=interface_json)
         if response.status_code == 200:
-            data =response.json()
-            return NumberDetails(**data)
-       
+            response_data = response.json()
+            encrypted_response = bytes.fromhex(response_data["data"]["content"])
+            response_signature = bytes.fromhex(response_data["data"]["signature"])
+            decrypted_data = verify_and_decrypt(encrypted_response, response_signature, public_key, private_key)
+            return json.loads(decrypted_data)
         else:
-            return HTTPException(status_code=404, detail="Task not found")
+            raise HTTPException(status_code=response.status_code, detail="Failed to get details from external system")
 
+# Endpoint to receive number and process it
 @app.post("/process-number/")
-async def process_number(input_number:InputNumber):
+async def process_number(request: Request):
+    input_data = await request.json()
+    
+    # Convert input data to JSON string
+    input_data_json = json.dumps(input_data)
+    
+    # Encrypt the input data and sign it
+    encrypted_data, signature = encrypt_and_sign(input_data_json, public_key, private_key)
+    
+    # Create interface JSON by updating the template
+    interface_json = interface_json_template.copy()
+    interface_json['data']['content'] = encrypted_data.hex()
+    interface_json['data']['signature'] = signature.hex()
+    interface_json['globalInfo']['requestTime'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    # Send the encrypted data to the external system and get the details
+    number_details = await send_number_to_external_system(interface_json)
+    
+    # Append the received details to the list
+    number_details_list.append(number_details)
 
-    encrypt_number = encrypt_number(input_number.number)
-
-    number_details = await send_number_to_external_system(encrypt_number)
-
-    number_details_list.append(number_details.dict())
-
+    # Convert the list of details to a pandas DataFrame
     df = pd.DataFrame(number_details_list)
-
+    
+    # Convert the DataFrame to a dictionary with records orientation
     data_in_table_format = df.to_dict(orient='records')
-
+    
+    # Return the data in table format
     return data_in_table_format
-
 
 if __name__ == "__main__":
     import uvicorn
-    
     uvicorn.run(app, host="localhost", port=8000)
-
-
-

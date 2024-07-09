@@ -1,0 +1,66 @@
+2024-07-09 09:19:47,419 - DEBUG - Using proactor: IocpProactor
+2024-07-09 09:20:07,017 - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-07-09 09:20:07,038 - DEBUG - load_verify_locations cafile='C:\\Python312\\Lib\\site-packages\\certifi\\cacert.pem'
+2024-07-09 09:20:07,646 - DEBUG - connect_tcp.started host='external-system-url' port=443 local_address=None timeout=5.0 socket_options=None
+2024-07-09 09:20:08,687 - DEBUG - connect_tcp.failed exception=ConnectError(gaierror(11001, 'getaddrinfo failed'))
+2024-07-09 09:25:24,532 - DEBUG - Using proactor: IocpProactor
+2024-07-09 09:26:48,395 - INFO - Item string requested
+2024-07-09 09:26:48,411 - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-07-09 09:26:48,446 - DEBUG - load_verify_locations cafile='C:\\Python312\\Lib\\site-packages\\certifi\\cacert.pem'
+2024-07-09 09:26:49,305 - DEBUG - connect_tcp.started host='external-system-url' port=443 local_address=None timeout=5.0 socket_options=None
+2024-07-09 09:26:50,334 - DEBUG - connect_tcp.failed exception=ConnectError(gaierror(11001, 'getaddrinfo failed'))
+2024-07-09 09:27:28,745 - INFO - Item 10001 requested
+2024-07-09 09:27:28,749 - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-07-09 09:27:28,749 - DEBUG - load_verify_locations cafile='C:\\Python312\\Lib\\site-packages\\certifi\\cacert.pem'
+2024-07-09 09:27:29,534 - DEBUG - connect_tcp.started host='external-system-url' port=443 local_address=None timeout=5.0 socket_options=None
+2024-07-09 09:27:30,546 - DEBUG - connect_tcp.failed exception=ConnectError(gaierror(11001, 'getaddrinfo failed'))
+2024-07-09 09:34:45,802 - DEBUG - Using proactor: IocpProactor
+2024-07-09 09:34:54,305 - INFO - Item string requested
+2024-07-09 09:34:54,305 - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-07-09 09:34:54,338 - DEBUG - load_verify_locations cafile='C:\\Python312\\Lib\\site-packages\\certifi\\cacert.pem'
+2024-07-09 09:34:54,997 - DEBUG - connect_tcp.started host='external-system-url' port=443 local_address=None timeout=5.0 socket_options=None
+2024-07-09 09:34:56,042 - DEBUG - connect_tcp.failed exception=ConnectError(gaierror(11001, 'getaddrinfo failed'))
+2024-07-09 09:36:41,561 - DEBUG - Using proactor: IocpProactor
+2024-07-09 09:36:48,582 - INFO - Item string requested
+2024-07-09 09:36:48,582 - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-07-09 09:36:48,591 - DEBUG - load_verify_locations cafile='C:\\Python312\\Lib\\site-packages\\certifi\\cacert.pem'
+2024-07-09 09:36:49,297 - DEBUG - connect_tcp.started host='external-system-url' port=443 local_address=None timeout=5.0 socket_options=None
+2024-07-09 09:36:50,325 - DEBUG - connect_tcp.failed exception=ConnectError(gaierror(11001, 'getaddrinfo failed'))
+2024-07-09 09:43:43,637 - DEBUG - Using proactor: IocpProactor
+2024-07-09 09:43:54,048 - INFO - Item string requested
+2024-07-09 09:43:54,048 - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-07-09 09:43:54,072 - DEBUG - load_verify_locations cafile='C:\\Python312\\Lib\\site-packages\\certifi\\cacert.pem'
+2024-07-09 09:43:54,777 - DEBUG - connect_tcp.started host='external-system-url' port=443 local_address=None timeout=5.0 socket_options=None
+2024-07-09 09:43:55,822 - DEBUG - connect_tcp.failed exception=ConnectError(gaierror(11001, 'getaddrinfo failed'))
+2024-07-09 09:45:27,081 - DEBUG - Using proactor: IocpProactor
+2024-07-09 09:45:41,957 - INFO - Item string requested
+2024-07-09 09:45:41,957 - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-07-09 09:45:41,960 - DEBUG - load_verify_locations cafile='C:\\Python312\\Lib\\site-packages\\certifi\\cacert.pem'
+2024-07-09 09:45:42,553 - DEBUG - connect_tcp.started host='external-system-url' port=443 local_address=None timeout=5.0 socket_options=None
+2024-07-09 09:45:43,588 - DEBUG - connect_tcp.failed exception=ConnectError(gaierror(11001, 'getaddrinfo failed'))
+2024-07-09 09:46:54,318 - DEBUG - Using proactor: IocpProactor
+2024-07-09 09:47:01,955 - INFO - Item string requested
+2024-07-09 09:47:01,956 - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-07-09 09:47:01,981 - DEBUG - load_verify_locations cafile='C:\\Python312\\Lib\\site-packages\\certifi\\cacert.pem'
+2024-07-09 09:47:02,644 - DEBUG - connect_tcp.started host='external-system-url' port=443 local_address=None timeout=5.0 socket_options=None
+2024-07-09 09:47:03,657 - DEBUG - connect_tcp.failed exception=ConnectError(gaierror(11001, 'getaddrinfo failed'))
+2024-07-09 09:49:16,629 - DEBUG - Using proactor: IocpProactor
+2024-07-09 09:52:11,024 - DEBUG - Using proactor: IocpProactor
+2024-07-09 10:03:39,116 - DEBUG - Using proactor: IocpProactor
+2024-07-09 10:06:17,141 - DEBUG - Using proactor: IocpProactor
+2024-07-09 10:07:56,498 - DEBUG - Using proactor: IocpProactor
+2024-07-09 10:10:17,353 - DEBUG - Using proactor: IocpProactor
+2024-07-09 10:13:43,577 - DEBUG - Using proactor: IocpProactor
+2024-07-09 10:17:49,240 - DEBUG - Using proactor: IocpProactor
+2024-07-09 10:18:39,789 - INFO - Item (b'\x04\xc1k\x84+\xd0\xb2\x17l\xdf\r\xca\x1a\x9as\x89\x8f{\x0e\xf0\xf8\xaaB\xc8;\xec\xa9\xba\xb5M#S\xc3\x9e`\xd7\xe0\xe4Z$n\x96\x87\x06\xf59~4\x90\xda\xf8\xf2\xdf\xa2*"pu\xa2bY\xdc\x027\xed\xf7\xe5\xc4\xdd0\x1b53\x7fiv\x10\xacsB\xeb\xf2\xb9\xc5E\x91%\x99\xf3\x0c\xf4\xd4E\xb2\xb3\x9dO\xa0o\xc8^\x99y\xf62\xdd\xa9$\x0fw\x16\xc5%u\x9d0\xf60g\xed,\x1a\xb3AH\x08\xd8P', b'\xa6\xd2(]A\x10\x19j\n\xbd\xcb\x16\xfc\xa9\x04\\)6\x97\x95\x8ch\x94\x83\xf2`\x01\x99;\x0e\x83zu\xcf\x10x\x11\xbf\xfc\x85AN\x11\xd8\xb1\xcc\x9f\xfe\x03\xd3\x8c\x0f\x05k\xa7\x17\xff\xafl\x00\x97\xb2=\xe0\xf6\xd9y\xd0\xe82\xa7\xcac/A\x89\x8e\xff\xab\xbaf\xc3\xa5\xf9\xc2\xb2\xe6Y\x19\x0c\xd2\x16\x0e\xbc\xb1\xe2m\x83\x8c\x19\xfb0\xc6\xc4t\x9f~\xd8\xd3\x7f\x0696\xb1~[[\x93\xfb\x07[$\xf6r\x0b\xbc\xbe\x01') requested
+2024-07-09 10:18:39,789 - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-07-09 10:18:39,850 - DEBUG - load_verify_locations cafile='C:\\Python312\\Lib\\site-packages\\certifi\\cacert.pem'
+2024-07-09 10:18:41,189 - DEBUG - connect_tcp.started host='external-system-url' port=443 local_address=None timeout=5.0 socket_options=None
+2024-07-09 10:18:42,222 - DEBUG - connect_tcp.failed exception=ConnectError(gaierror(11001, 'getaddrinfo failed'))
+2024-07-09 10:19:02,319 - INFO - Item (b"YU\x981lw\xbc\x0f\xc4\x9b\xa7\xc8a\x0e@\x01,\x85[\x90LC\x01'\x16s\xa1\xa3t\xbf\x9f\xa2\xc9\xea\r\xb7\x83Z\x8a\xc6K8\xdc \x9c\x8ahI\xe7\xeb\xfam\xe2\x126\xfe\x89MP\x99\\\xff\x15\x1cw\xce\xad\xc7s\xac\xd5\x07\x88\xa4\xe8<\xbbJw\xc0\x17h\x89\x8d\xa8I\xdc \xe4\xe1\x00\xcd\tI<\xacX\xdf\xda\xd6\xf1\xd1\xdf\xdcr\xf4m<\x07{\xa8\xde\x8fI\x9b[d[\xe5x\x18\xaf%\x0e\x95g\xd3Q", b'A=+R\x82r`\xf2\x82\x9d.\x19`\x9c\x1a)\x91\xcd\x12~?Dw\xa6\x89\xcbh\xf8\xdd\xbc\x0e\xdd\x93\x08.\x1cJP<\x1dF\xed\x90\xa69\x7f\x89(\xa1jN\x94\xd5\xd06\xf11\xd8\xc2Y\x88`\xc3H}\xd34$\xce\x1d\xben\xb0\x0cN\x83\xc1H\xb3\x84;\xf0\xa2\xdc\xdam\xf3\x96\xc1W0A]_\xd4K\xf0c\x15\x85(\xcc\xdf\xcd\x88l\xddD\x1c\xf4\x14\xa4\x92\x0b\xc5\xb5\x0b;\xf4 ^\x97\x8e\x86#\xc4N\x80') requested
+2024-07-09 10:19:02,319 - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-07-09 10:19:02,319 - DEBUG - load_verify_locations cafile='C:\\Python312\\Lib\\site-packages\\certifi\\cacert.pem'
+2024-07-09 10:19:02,974 - DEBUG - connect_tcp.started host='external-system-url' port=443 local_address=None timeout=5.0 socket_options=None
+2024-07-09 10:19:04,003 - DEBUG - connect_tcp.failed exception=ConnectError(gaierror(11001, 'getaddrinfo failed'))
+2024-07-09 11:01:34,912 - DEBUG - Using proactor: IocpProactor
+2024-07-09 11:04:05,911 - DEBUG - Using proactor: IocpProactor

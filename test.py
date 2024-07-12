@@ -1,12 +1,13 @@
-from dataclasses import dataclass
+from dataclasses import Field, dataclass
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import Any, List, Optional
 from datetime import datetime
-from crypto.Cipher import AES
-from crypto.Random import get_random_bytes
-from crypto.Protocol.KDF import scrypt
-from crypto.Util.Padding import pad, unpad
+from uuid import UUID
+from Cryptodome.Random import get_random_bytes
+from Cryptodome.Protocol.KDF import scrypt
+from Cryptodome.Util.Padding import pad, unpad
+from Cryptodome.Cipher import AES
 import base64
 import json
 import httpx
@@ -70,21 +71,21 @@ class ExtendField:
 
 @dataclass
 class GlobalInfo:
-    appId: str
-    version: str
-    dataExchangeId: str
+    appId: str #= "AP04"
+    version: str #= "1.1.20191201"
+    dataExchangeId: UUID
     interfaceCode: str
     requestCode: str
-    requestTime: str
+    requestTime: datetime
     responseCode: str
     userName: str
-    deviceMAC: str
-    deviceNo: str
-    tin: str
+    deviceMAC: str #="FFFFFFFFFFFF"
+    deviceNo: str 
+    tin: str 
     brn: str
     taxpayerID: str
-    longitude: str
-    latitude: str
+    longitude: float 
+    latitude: float 
     agentType: str
     extendField: ExtendField
 
@@ -201,7 +202,7 @@ class InputNumber(BaseModel):
 
 
 
-class Page:
+class Page(BaseModel):
     pageCount: int
     pageNo: int
     pageSize: int
@@ -306,10 +307,12 @@ def load_keys():
 
 # Function to encrypt data using AES and sign using RSA
 def encrypt_data(data: str, aes_key: bytes) -> dict:
-    IV = get_random_bytes(AES.block_size)
+    IV_data= get_random_bytes(AES.block_size)
     cipher = AES.new(aes_key, AES.MODE_CBC, IV)
-    encrypted_data = cipher.encrypt(pad(data.encode(), AES.block_size))
-    
+    encrypt_data = cipher.encrypt(pad(data.encode(), AES.block_size))
+    encrypted_data = base64.b64encode(encrypt_data).decode('utf-8')
+    IV = base64.b64encode(IV_data).decode('utf-8')
+
     combined_data = {
         "encrypted_data": base64.b64encode(encrypted_data).decode('utf-8'),
         "iv": base64.b64encode(IV).decode('utf-8')
@@ -398,22 +401,22 @@ async def process_number():
 
     encrypted_data = await encrypt_data(input_json_data)
     signed_data = sign_data(encrypted_data)
-    logger.info(f"Item {encrypted_data} requested")
+    logger.info(f"Item {input_json_data} requested")
 
     Interface = interface_data = {
     "data": {
         "content": encrypted_data,
         "signature": signed_data,
         "dataDescription": {
-            "codeType": "0",
-            "encryptCode": "1",
+            "codeType": "1",
+            "encryptCode": "2",
             "zipCode": "0"
         }
     },
     "globalInfo": {
-        "appId": "AP01",
+        "appId": "AP04",
         "version": "1.1.20191201",
-        "dataExchangeId": "9230489223014123",
+        "dataExchangeId": 9230489223014123,
         "interfaceCode": "T101",
         "requestCode": "TP",
         "requestTime": "2019-06-11 17:07:07",
@@ -424,8 +427,8 @@ async def process_number():
         "tin": "1009830865",
         "brn": "",
         "taxpayerID": "1",
-        "longitude": "116.397128",
-        "latitude": "39.916527",
+        "longitude": 116.397128,
+        "latitude": 39.916527,
         "agentType": "0",
         "extendField": {
             "responseDateFormat": "dd/MM/yyyy",

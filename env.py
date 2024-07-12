@@ -1,6 +1,6 @@
 import os
-from crypto.Random import get_random_bytes
-from crypto.Cipher import AES
+from Cryptodome.Random import get_random_bytes
+from Cryptodome.Cipher import AES
 
 # Generate a random AES key and IV
 AES_KEY = get_random_bytes(AES.block_size)

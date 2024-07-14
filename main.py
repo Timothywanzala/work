@@ -1,7 +1,7 @@
 
 # Import statements remain the same
 from dataclasses import Field, dataclass
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel
 from typing import Any, List, Optional
 from datetime import datetime
@@ -17,6 +17,8 @@ import logging
 import pandas as pd
 import os
 import rsa
+from dotenv import load_dotenv
+load_dotenv()
 
 app = FastAPI()
 
@@ -173,7 +175,7 @@ class InputNumber(BaseModel):
     sellerLegalOrBusinessName: str
 
     @staticmethod
-    def from_dict(obj: Any) -> 'InputNumber':
+    def from_dict(obj):
         _oriInvoiceNo = str(obj.get("oriInvoiceNo"))
         _invoiceNo = str(obj.get("invoiceNo"))
         _deviceNo = str(obj.get("deviceNo"))
@@ -195,7 +197,8 @@ class InputNumber(BaseModel):
         _dataSource = str(obj.get("dataSource"))
         _sellerTinOrNin = str(obj.get("sellerTinOrNin"))
         _sellerLegalOrBusinessName = str(obj.get("sellerLegalOrBusinessName"))
-        return InputNumber(_oriInvoiceNo, _invoiceNo, _deviceNo, _buyerTin, _buyerNinBrn, _buyerLegalName, _combineKeywords, _invoiceType, _invoiceKind, _isInvalid, _isRefund, _startDate, _endDate, _pageNo, _pageSize, _referenceNo, _branchName, _queryType, _dataSource, _sellerTinOrNin, _sellerLegalOrBusinessName)
+        # return InputNumber(_oriInvoiceNo, _invoiceNo, _deviceNo, _buyerTin, _buyerNinBrn, _buyerLegalName, _combineKeywords, _invoiceType, _invoiceKind, _isInvalid, _isRefund, _startDate, _endDate, _pageNo, _pageSize, _referenceNo, _branchName, _queryType, _dataSource, _sellerTinOrNin, _sellerLegalOrBusinessName)
+        return _oriInvoiceNo, _invoiceNo, _deviceNo, _buyerTin, _buyerNinBrn, _buyerLegalName, _combineKeywords, _invoiceType, _invoiceKind, _isInvalid, _isRefund, _startDate, _endDate, _pageNo, _pageSize, _referenceNo, _branchName, _queryType, _dataSource, _sellerTinOrNin, _sellerLegalOrBusinessName
 
 
 
@@ -303,8 +306,11 @@ def load_keys():
     return public_key, private_key
     
 AES_KEY = bytes.fromhex(os.getenv('AES_KEY', ''))
+# AES_KEY = os.getenv('AES_KEY', '')
 IV = bytes.fromhex(os.getenv('IV', ''))
-deviceNumber = bytes.fromhex(os.getenv('deviceNumber', ''))
+# IV = os.getenv('IV', '')
+deviceNumber = '12312'
+# deviceNumber = bytes.fromhex(os.getenv('deviceNumber', ''))
 
 # Function to encrypt data using AES-CBC mode
 def encrypt_data(data: str, aes_key: bytes, iv: bytes) -> dict:
@@ -321,8 +327,7 @@ def encrypt_data(data: str, aes_key: bytes, iv: bytes) -> dict:
 def sign_data(encrypted_data: str, private_key) -> str:
     encrypted_bytes = base64.b64decode(encrypted_data)
     signed = rsa.sign(encrypted_bytes, private_key, 'SHA-256')
-    signature = base64.b64encode(signed).decode('utf-8')
-    return signature
+    return signed
 
 # Decryption and verification functions corrected
 def decrypt_data(encrypted_data: bytes, iv: bytes, aes_key: bytes) -> str:
@@ -335,7 +340,7 @@ def verify_signature(encrypted_data: str, signature: str, public_key) -> None:
     signature_bytes = base64.b64decode(signature)
     rsa.verify(encrypted_bytes, signature_bytes, public_key)
 
-async def send_number_to_external_system(Interface_json_data_sent:str) -> NumberDetails:
+async def send_number_to_external_system(Interface_json_data_sent) -> NumberDetails:
     async with httpx.AsyncClient() as client:
         try:
             response = await client.post("https://external-system-url/api", json=Interface_json_data_sent)
@@ -364,11 +369,29 @@ async def send_number_to_external_system(Interface_json_data_sent:str) -> Number
             print(f"Unexpected HTTP status: {e.response.status_code}")
 
 
+
+@app.get("/process-get-number/")
+async def process_get_number():
+    response_data = {
+        "status": "success",
+        "message": "Number processed successfully",
+        "data": {
+            "number": "00000000001",
+            "details": "Some details about the number"
+        }
+    }
+    return response_data
+    
+
 @app.post("/process-number/")
-async def process_number():
-    request_data = {
+def process_number(request: Request):
+    request_data = request.json()
+    # oriInvoince = request_data.get('oriInvoince')
+    import pdb;pdb.set_trace()
+    # request_data = 
+    {
     "oriInvoiceNo": "00000000002",
-    "invoiceNo": "00000000001",
+    "invoicenumberNo": "00000000001",
     "deviceNo": "00031000092",
     "buyerTin": "7777777777",
     "buyerNinBrn": "00000000001",
@@ -389,21 +412,24 @@ async def process_number():
     "sellerTinOrNin": "1009837013",
     "sellerLegalOrBusinessName": "CLASSY TRENDS BOUTIQUE"
     }
-
     input_number_dict = InputNumber.from_dict(request_data)
+
     input_json_data = json.dumps(input_number_dict, indent=2)
 
     # Load RSA keys
-    private_key = load_keys()
+    _, private_key = load_keys()
 
     # Encrypt and sign the data
     encrypted_data = encrypt_data(input_json_data, AES_KEY, IV)
-    signed_data = sign_data(encrypted_data["encrypted_data"], private_key)
+    encrypted_string_data = encrypted_data.get('encrypted_data', '')
+    signed_data = sign_data(encrypted_string_data, private_key)
+    # encrypted_string_data = base64.b64encode(encrypted_string_data).decode('utf-8')
+    # encrypted_string_data = base64.b64encode(encrypted_string_data.encode('utf-8')).decode('utf-8')
     
     # Create the interface data
     interface_data = {
         "data": {
-            "content": encrypted_data["encrypted_data"],
+            "content": encrypted_string_data,
             "signature": signed_data,
             "dataDescription": {
                 "codeType": "1",
@@ -412,51 +438,58 @@ async def process_number():
             }
         },
         "globalInfo": {
-          "appId": "AP04",
-        "version": "1.1.20191201",
-        "dataExchangeId": 9230489223014123,
-        "interfaceCode": "T101",
-        "requestCode": "TP",
-        "requestTime": "2019-06-11 17:07:07",
-        "responseCode": "TA",
-        "userName": "admin",
-        "deviceMAC": "FFFFFFFFFFFF",
-        "deviceNo": "00022000634",
-        "tin": "1009830865",
-        "brn": "",
-        "taxpayerID": "1",
-        "longitude": 116.397128,
-        "latitude": 39.916527,
-        "agentType": "0",
-        "extendField": {
-            "responseDateFormat": "dd/MM/yyyy",
-            "responseTimeFormat": "dd/MM/yyyy HH:mm:ss",
-            "referenceNo": "21PL010020807",
-            "operatorName": "administrator",
-            "offlineInvoiceException": {
-                "errorCode": "",
-                "errorMsg": ""
-            }
-        },
-        "returnStateInfo": {
-           "returnStateInfo": {
-        "returnCode": "",
-        "returnMessage": ""
+            "appId": "AP04",
+            "version": "1.1.20191201",
+            "dataExchangeId": 9230489223014123,
+            "interfaceCode": "T101",
+            "requestCode": "TP",
+            "requestTime": "2019-06-11 17:07:07",
+            "responseCode": "TA",
+            "userName": "admin",
+            "deviceMAC": "FFFFFFFFFFFF",
+            "deviceNo": "00022000634",
+            "tin": "1009830865",
+            "brn": "",
+            "taxpayerID": "1",
+            "longitude": 116.397128,
+            "latitude": 39.916527,
+            "agentType": "0",
+            "extendField": {
+                "responseDateFormat": "dd/MM/yyyy",
+                "responseTimeFormat": "dd/MM/yyyy HH:mm:ss",
+                "referenceNo": "21PL010020807",
+                "operatorName": "administrator",
+                "offlineInvoiceException": {
+                    "errorCode": "",
+                    "errorMsg": ""
+                }
+            },
+            "returnStateInfo": {
+                "returnStateInfo": {
+                "returnCode": "",
+                "returnMessage": ""
                 }
             }
-      }
+        }
     }
-    
-    try:
-        response = await send_number_to_external_system(interface_data)
-        number_details_list.append(response.model_dump())
-        df = pd.DataFrame(number_details_list)
-        data_in_table_format = df.to_dict(orient='records')
-    except HTTPException as exc:
-        logger.error(f"Error processing number: {exc}")
-        return exc
-    else:
-        return data_in_table_format
+
+    return {
+            "status": "success", 
+            "message": "Number processed successfully", 
+            "data": "it will leave here"}
+    # try:
+    #     response = send_number_to_external_system(interface_data)
+    #     number_details_list.append(response.model_dump())
+    #     df = pd.DataFrame(number_details_list)
+    #     data_in_table_format = df.to_dict(orient='records')
+    # except HTTPException as exc:
+    #     logger.error(f"Error processing number: {exc}")
+    #     return {"status": "error", "message": str(exc)}
+    # else:
+    #     return {
+    #         "status": "success", 
+    #         "message": "Number processed successfully", 
+    #         "data": data_in_table_format}
 
 if __name__ == "__main__":
     import uvicorn

@@ -42,3 +42,30 @@
 2024-07-14 23:20:54,301 - DEBUG - Using proactor: IocpProactor
 2024-07-14 23:23:51,779 - DEBUG - Using proactor: IocpProactor
 2024-07-14 23:26:28,315 - DEBUG - Using proactor: IocpProactor
+2024-07-16 08:07:25,542 - DEBUG - Using proactor: IocpProactor
+2024-07-16 09:28:27,942 - DEBUG - Using proactor: IocpProactor
+2024-07-16 09:50:01,339 - DEBUG - Using proactor: IocpProactor
+2024-07-16 10:02:30,010 - DEBUG - Using proactor: IocpProactor
+2024-07-16 10:25:03,085 - DEBUG - Using proactor: IocpProactor
+2024-07-16 10:46:28,807 - DEBUG - Using proactor: IocpProactor
+2024-07-16 10:54:41,622 - DEBUG - Using proactor: IocpProactor
+2024-07-16 11:00:05,604 - DEBUG - Using proactor: IocpProactor
+2024-07-16 11:03:50,146 - DEBUG - Using proactor: IocpProactor
+2024-07-16 11:57:24,149 - DEBUG - Using proactor: IocpProactor
+2024-07-16 12:07:07,290 - DEBUG - Using proactor: IocpProactor
+2024-07-16 13:12:36,078 - DEBUG - Using proactor: IocpProactor
+2024-07-16 13:22:56,051 - DEBUG - Using proactor: IocpProactor
+2024-07-16 13:27:25,421 - DEBUG - Using proactor: IocpProactor
+2024-07-16 13:33:55,758 - DEBUG - Using proactor: IocpProactor
+2024-07-16 13:34:27,141 - DEBUG - Using proactor: IocpProactor
+2024-07-16 13:37:15,410 - DEBUG - Using proactor: IocpProactor
+2024-07-16 13:40:23,324 - DEBUG - Using proactor: IocpProactor
+2024-07-16 13:50:21,737 - DEBUG - Using proactor: IocpProactor
+2024-07-16 14:53:51,127 - DEBUG - Using proactor: IocpProactor
+2024-07-16 14:58:27,814 - DEBUG - Using proactor: IocpProactor
+2024-07-16 15:00:03,148 - DEBUG - Using proactor: IocpProactor
+2024-07-16 15:01:57,965 - DEBUG - Using proactor: IocpProactor
+2024-07-16 15:20:38,288 - DEBUG - Using proactor: IocpProactor
+2024-07-16 15:21:07,518 - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-07-16 15:21:07,544 - DEBUG - load_verify_locations cafile='C:\\Python312\\Lib\\site-packages\\certifi\\cacert.pem'
+2024-07-16 15:57:29,273 - DEBUG - Using proactor: IocpProactor

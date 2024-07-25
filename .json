@@ -1,0 +1,35 @@
+{
+  "data": {
+    "content": "lomgMIQ2avqkx19qS7SRIA==",
+    "signature": "HwizdGxj+WwfhhqoKGxsW8FC7tZpUFwQQgIuNQJ+xMKpZmPs7bHNIdYS7nKeIWJPINxdq+S0tzaAZr0VObHAP8+LNx+LfalA3DqRdZKoAM1N2QmXa631hmFbzR/fHje5zyvKAxcuw3lbc8Ad4U9TJSKKJW0N8CItg5Z2Bu7232M=",
+    "dataDescription": { "codeType": "1", "encryptCode": "2", "zipCode": "0" }
+  },
+  "globalInfo": {
+    "appId": "AP04",
+    "version": "1.1.20191201",
+    "dataExchangeId": "9230489223014123",
+    "interfaceCode": "T101",
+    "requestCode": "TP",
+    "requestTime": "2024-07-17 12:19:30",
+    "responseCode": "TA",
+    "userName": "admin",
+    "deviceMAC": "FFFFFFFFFFFF",
+    "deviceNo": "10086838_01",
+    "tin": "1008686938",
+    "brn": "",
+    "taxpayerID": "1",
+    "longitude": "116.397128",
+    "latitude": "39.916527",
+    "agentType": "0",
+    "extendField": {
+      "responseDateFormat": "dd/MM/yyyy",
+      "responseTimeFormat": "dd/MM/yyyy HH:mm:ss",
+      "referenceNo": "21PL010020807",
+      "operatorName": "administrator",
+      "offlineInvoiceException": { "errorCode": "", "errorMsg": "" }
+    },
+    "returnStateInfo": {
+      "returnStateInfo": { "returnCode": "", "returnMessage": "" }
+    }
+  }
+}

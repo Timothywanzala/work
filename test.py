@@ -24,6 +24,7 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.x509 import load_pem_x509_certificate
 from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.serialization import pkcs12
 
 # Setup logging
 logging.basicConfig(level=logging.DEBUG, filename='app.log', filemode='a', format='%(asctime)s - %(levelname)s - %(message)s')
@@ -259,8 +260,16 @@ class NumberDetails(BaseModel):
         _records = [Record.from_dict(y) for y in obj.get("records")]
         return NumberDetails(_dateFormat, _nowTime, _page, _records)
 def load_keys():
-    with open("private.crt", "rb") as f:
-        private_key = rsa.PrivateKey.load_pkcs1(f.read())
+    with open("nssf_private.p12", "rb") as file:
+     p12_data = file.read()
+
+    # Extract the private key, certificate, and additional certificates (if any)
+    private_key, certificate, additional_certificates = pkcs12.load_key_and_certificates(
+        p12_data, 
+        b'Nasa123', 
+        default_backend()
+    )
+
     with open('_.ura.go.ug.crt', 'rb') as cert_file:
         cert_data = cert_file.read()
     
@@ -290,7 +299,11 @@ def encrypt_data(data: str, aes_key: bytes, iv: bytes) -> dict:
 
 # Signing function corrected
 def sign_data(encrypted_data: str, private_key) -> str:
-    signed = rsa.sign(encrypted_data, private_key, 'SHA-256')
+    signed = private_key.sign(
+            encrypted_data,
+            padding.PKCS1v15(),
+            hashes.SHA256()
+        )
     return signed
 
 # Decryption and verification functions corrected
@@ -326,27 +339,29 @@ async def send_number_to_external_system(Interface_json_data_sent:str):
             response = await client.post("https://efristest.ura.go.ug/efrisws/ws/taapp/getInformation", 
                                          json=Interface_json_data_sent,  timeout=60.0)
             response.raise_for_status()
-            
-            if response.status_code == 200:
-                response_data = response.json()
-                encrypted_data = response_data["data"]["content"]
-                response_data_signature = response_data["data"]["signature"]
+            response.status_code == 200
+            response_data = response.json()
+            return  response_data
+            # if response.status_code == 200:
+            #     response_data = response.json()
+            #     encrypted_data = response_data["data"]["content"]
+            #     response_data_signature = response_data["data"]["signature"]
 
-                # Verify the signature
-                # import pdb; pdb.set_trace()
-                if not verify_signature(encrypted_data, response_data_signature):
-                    raise ValueError("Signature verification failed. The data may be tampered with.")
+            #     # Verify the signature
+            #     # import pdb; pdb.set_trace()
+            #     if not verify_signature(encrypted_data, response_data_signature):
+            #         raise ValueError("Signature verification failed. The data may be tampered with.")
                 
-                else:
-                    decrypted = decrypt_data(encrypted_data)
-                    decrypted_data = decrypted
+            #     else:
+            #         decrypted = decrypt_data(encrypted_data)
+            #         decrypted_data = decrypted
 
-                    # Parse the decrypted data to the appropriate data class
-                    number_details = NumberDetails.from_dict(json.loads(decrypted_data))
-                    return number_details
+            #         # Parse the decrypted data to the appropriate data class
+            #         number_details = NumberDetails.from_dict(json.loads(decrypted_data))
+            #         return number_details
                 
-            else:
-                raise ValueError(f"Unexpected status code: {response.status_code}. No valid response from the external system.")
+            # else:
+            #     raise ValueError(f"Unexpected status code: {response.status_code}. No valid response from the external system.")
     
         # except httpx.HTTPStatusError as e:
         #     print(f"Unexpected HTTP status: {e.response.status_code}")
@@ -389,8 +404,8 @@ async def get_reference_details(request: Request, refNo:str):
     # Create the interface data
     interface_data ={
                 "data": {
-                "content": " ",
-                "signature": "",
+                "content": encrypted_string_data,
+                "signature": signed_bytes,
                 "dataDescription": {
                 "codeType": "0",
                 "encryptCode": "1",
@@ -398,26 +413,26 @@ async def get_reference_details(request: Request, refNo:str):
                 }
                 },
                 "globalInfo": {
-                "appId": "AP01",
+                "appId": "AP04",
                 "version": "1.1.20191201",
                 "dataExchangeId": "9230489223014123",
-                "interfaceCode": "T101",
+                "interfaceCode": "T104",
                 "requestCode": "TP",
-                "requestTime": "2024-07-25 15:40:37",
+                "requestTime": "2024-07-26 17:20:37",
                 "responseCode": "TA",
                 "userName": "admin",
                 "deviceMAC": "FFFFFFFFFFFF",
                 "deviceNo": "1008686938_01",
                 "tin": "1008686938",
-                "brn": "",
-                "taxpayerID": "1",
+                "brn": "001868267/",
+                "taxpayerID": "1008686938",
                 "longitude": "116.397128",
                 "latitude": "39.916527",
                 "agentType": "0",
                 "extendField": {
                 "responseDateFormat": "dd/MM/yyyy",
                 "responseTimeFormat": "dd/MM/yyyy HH:mm:ss",
-                "referenceNo": "21PL010020807" ,
+                "referenceNo": " 25PL040000002" ,
                 "operatorName": "administrator",
                 "offlineInvoiceException": {
                 "errorCode": "",
@@ -430,7 +445,8 @@ async def get_reference_details(request: Request, refNo:str):
                 "returnMessage": ""
                 }
                 }
-
+#   "referenceNo": "21PL010020807
+# 25PL010000073. brn
     # return {
     #         "status": "success", 
     #         "message": "Number processed successfully", 
